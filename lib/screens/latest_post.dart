@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:thewritingparadigm/screens/post_details.dart';
 import 'package:thewritingparadigm/service/post_data.dart';
@@ -17,6 +19,7 @@ class _LatestPostState extends State<LatestPost> {
     return FutureBuilder<List>(
       future: postService.getAllPost(),
       builder: (context, snapshot) {
+        log(snapshot.data.toString());
         if (snapshot.hasData) {
           if (snapshot.data!.isEmpty) {
             return const Center(child: Text("No Post Available"));
@@ -35,8 +38,13 @@ class _LatestPostState extends State<LatestPost> {
                         SizedBox(
                           width: double.infinity,
                           height: 250.0,
-                          child: Image.network(snapshot.data![i]["_embedded"]
-                          !["wp:featuredmedia"][0]["source_url"]),
+                          child: snapshot.data![i]
+                                      ["_embedded"]!["wp:featuredmedia"] !=
+                                  null
+                              ? Image.network(snapshot.data![i]
+                                      ["_embedded"]!["wp:featuredmedia"][0]
+                                  ["source_url"])
+                              : Container(),
                         ),
                         const SizedBox(
                           height: 15.0,
